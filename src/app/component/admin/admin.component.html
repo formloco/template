@@ -1,0 +1,85 @@
+<div class="nav-padding" fxLayout="row" fxLayoutAlign="space-between center">
+  <div>
+    <h2>Template Admin</h2>
+  </div>
+  <div fxLayoutGap="10px">
+    <button mat-stroked-button (click)="isImportOpen = !isImportOpen" class="menu-label" cdkOverlayOrigin #importTrigger="cdkOverlayOrigin">
+      <mat-icon>import_export</mat-icon>Import Template
+    </button>
+    <button (click)="goTemplates()" mat-stroked-button color="primary">
+      CANCEL
+    </button>
+    <div fxLayout="row">
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="importTrigger" [cdkConnectedOverlayOpen]="isImportOpen" (backdropClick)="closeOverlay()"
+        [cdkConnectedOverlayHasBackdrop]=true cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop">
+        <div class="link-overlay" fxLayout="column">
+          <div class="files-padding">
+            <ngx-dropzone class="custom-dropzone" accept="*" [multiple]="true" [maxFileSize]="200000" (change)="onSelect($event)">
+              <ngx-dropzone-label>Drop JSON file(s) or click to select for import</ngx-dropzone-label>
+              <ngx-dropzone-preview *ngFor="let f of fileArray" [removable]="true" (removed)="onRemove(f)">
+                <ngx-dropzone-label>
+                  <p>{{ f.name }}</p>
+                  <p *ngIf="f.type">({{ f.type }})</p>
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+            </ngx-dropzone>
+          </div>
+          <div *ngIf="isError">From controls and details must have the same count.</div>
+          <br>
+          <div fxLayoutAlign="center" fxLayout="row" fxLayoutGap="1rem">
+            <button (click)="import()" mat-raised-button color="primary" [disabled]="isNotFile">
+              Import
+            </button>
+            <button mat-stroked-button color="primary" (click)="closeOverlay()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="content" fxLayout="column">
+  <form [formGroup]="templateForm">
+    <div formArrayName="templateArray" fxLayout="row wrap" fxLayoutGap="16px" fxFlex>
+      <ng-container *ngFor="let template of templateForm.get('templateArray')?.controls; let i=index;">
+        <div [formGroupName]="i">
+          <mat-card>
+            <div fxLayout="column" fxLayoutAlign="center center">
+              <div>
+                <mat-form-field fxFlex>
+                  <mat-label>Template Name</mat-label>
+                  <textarea matInput formControlName="name">{{template.name}}</textarea>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field fxFlex>
+                  <mat-label>Description</mat-label>
+                  <textarea matInput formControlName="description">{{template.description}}</textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row">
+              <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50">
+                <mat-slide-toggle (change)="publish(template, i)" color="warn" formControlName="is_published">
+                </mat-slide-toggle>
+                <div *ngIf="templates[i].is_published">Published</div>
+                <div *ngIf="!templates[i].is_published">Publish{{template.is_published}}</div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <div fxLayout="row" fxLayoutGap="1rem">
+                  <button (click)=delete(i) mat-mini-fab color="accent">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button (click)=save(template,i) mat-mini-fab color="primary">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>

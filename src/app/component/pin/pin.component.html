@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <div class="mat-headline">Enter PIN</div>
+  </div>
+  <form [formGroup]="pinForm">
+    <div fxLayout="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>PIN</mat-label>
+        <input matInput placeholder="Enter PIN" formControlName="pin" type="password" required>
+        <mat-error>
+          PIN is required!
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions fxLayoutAlign="center" fxLayout="row" fxLayoutGap="1rem">
+      <button (click)="goTemplates()" mat-stroked-button color="primary">
+        CANCEL
+      </button>
+      <button (click)="checkPIN()" mat-raised-button color="primary" [disabled]="!pinForm.valid">
+        OK
+      </button>
+    </div>
+  </form>
+</div>

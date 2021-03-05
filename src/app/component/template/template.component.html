@@ -1,0 +1,19 @@
+<div class="nav-padding" fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div>&nbsp;</div>
+    <div fxLayoutGap="10px">
+      <button mat-stroked-button class="menu-label" (click)="goPIN()">Manage Templates</button>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="20px" fxFlex>
+    <mat-card *ngFor="let template of templates">
+      <div>{{template.form.name}}</div>
+      <div class="stretch">{{template.description}}</div>
+      <div>
+        <button mat-stroked-button (click)="previewForm(template)" matTooltip="Preview Template" fxFlex>
+          <mat-icon>preview</mat-icon>&nbsp;Preview
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>
